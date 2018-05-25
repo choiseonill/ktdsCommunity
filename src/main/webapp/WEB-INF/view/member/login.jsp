@@ -6,13 +6,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<link rel="stylesheet"
-	href="<c:url value="/bootstrap/css/bootstrap.css" />">
 <link href="<c:url value="/bootstrap/css/bootstrap.min.css"/>"
 	rel="stylesheet">
-
+<link rel="stylesheet" type="text/css"
+	href="<c:url value="/static/css/footer.css"/>" />
 <script src="<c:url value="/static/js/jquery-3.3.1.min.js"/>"
 	type="text/javascript"></script>
 <script type="text/javascript">
@@ -31,45 +28,48 @@
 		});
 	});
 </script>
-<title>로그인 Page</title>
+<title>Insert title here</title>
 </head>
+
+
 <body>
-	<nav class="navbar navbar-default">
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle collapsed"
-				data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
-				aria-expanded="false">
-				<span class="icon-bar"></span> <span class="icon-bar"></span> <span
-					class="icon-bar"></span>
-			</button>
-			<a class="navbar-brand" href="#">JSP 게시판</a>
-		</div>
-	</nav>
-	<hr />
-	<div class="container">
-		<div class="col-lg-4"></div>
-		<div class="col-lg-4">
-			<div class="jumbotron" style="padding-top: 20px;">
-					<form:form modelAttribute="loginForm">
-					<h3 style="text-align: center;">로그인 화면</h3>
-					<div class="form-group">
-						<input type="text" class="form-control" placeholder="아이디"
-							name="userId" maxlength="20" />
-					</div>
-					<div class="form-group">
-						<input type="password" class="form-control" placeholder="비밀번호"
-							name="userPassword" maxlength="20" />
-					</div>
-					<div class="form-group">
-						<input type="submit" class="btn btn-primary form-control"
-							id="loginBtn"value="로그인" />
-					</div>
-					<input type="button" class="btn btn-primary form-control"
-						id="joinBtn" value="회원가입" />
+
+	<!-- nav -->
+	<jsp:include page="/WEB-INF/view/template/menu.jsp"/>
+	<!-- /nav -->
+	
+	<!-- login -->
+    <div class="container" style="margin-top: 100px;" >
+		 <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
+		 	<div class="login-panel panel panel-default">
+		 	<div class="panel-heading"><h3 class="panel-title"><strong>Log In </strong></h3></div>
+		 	
+		  	<div class="panel-body">
+		    	<form:form modelAttribute="loginForm" class="form-signin">
+		    	
+		  		<div class="form-group">
+		    		<label for="exampleInputEmail1">Email</label>
+		    		<input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
+		  		</div>
+		  		
+		  		<div class="form-group">
+		    		<label for="exampleInputPassword1">Password</label>
+		    		<input type="password" class="form-control" id="password" name="password" placeholder="Password">
+		  		</div>
+		  		
+		  		<button type="button" id="loginBtn" class="btn btn-sm btn-default">login</button>
+		  		<button type="button" id="joinBtn"class="btn btn-sm btn-default">Join</button>
+		  		
 				</form:form>
-			</div>
+		  	</div>
 		</div>
 	</div>
-	<script src="<c:url value="/bootstrap/js/bootstrap.min.js"/>"></script>
+ </div>
+ <!-- /login -->
+
+	<!-- footer -->
+	<jsp:include page="/WEB-INF/view/template/footer.jsp"/>
+	<!-- /footer -->
+
 </body>
 </html>

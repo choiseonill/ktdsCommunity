@@ -10,52 +10,36 @@
 	<mvc:resources location="/WEB-INF/static/" mapping="/static/**"></mvc:resources>
 	<mvc:resources location="/WEB-INF/bootstrap/" mapping="/bootstrap/**"></mvc:resources>
 
+
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
 			<mvc:exclude-mapping path="/login" />
 			<mvc:exclude-mapping path="/join" />
-			<mvc:exclude-mapping path="/list" />
 			<mvc:exclude-mapping path="/static/**" />
 			<mvc:exclude-mapping path="/bootstrap/**" />
+			<mvc:exclude-mapping path="/api/exists/email"/>
+			<mvc:exclude-mapping path="/api/exists/nickname"/>
 			<bean id="sessionInterceptor" class="com.ktdsProject.interceptors.SessionInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>
 
-	<mvc:interceptors>
-		<mvc:interceptor>
-			<mvc:mapping path="/login" />
-			<bean id="logincCheckInterceptor" class="com.ktdsProject.interceptors.LogincCheckInterceptor" />
-		</mvc:interceptor>
-	</mvc:interceptors>
+	
 
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/view/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
-
-	<bean id="communityDAO" class="com.ktdsProject.community.dao.CommunityDAOImpl"></bean>
-
-
-	<bean id="communityService" class="com.ktdsProject.community.service.CommunityServiceImpl">
-		<property name="communityDAO" ref="communityDAO" />
-	</bean>
-
-	<bean id="communityController" class="com.ktdsProject.community.web.CommunityController">
-		<property name="communityService" ref="communityService" />
-	</bean>
+	
+	<bean id="multipartResolver"
+         class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+      <property name="defaultEncoding" value="UTF-8"/>
+      <property name="maxUploadSize" value="104857600"/>
+   </bean>
 
 
-	<bean id="memberController" class="com.ktdsProject.member.web.MemberController">
-		<property name="memberService" ref="memberService" />
-	</bean>
+ 	<import resource="controllerContext.xml" />
 
-	<bean id="memberDao" class="com.ktdsProject.member.dao.MemberDaoImplForOracle">
-		<property name="sqlSessionTemplate" ref="sqlSessionTemplate" />
-	</bean>
 
-	<bean id="memberService" class="com.ktdsProject.member.service.MemberServiceImpl">
-		<property name="memberDao" ref="memberDao" />
-	</bean>
 </beans>

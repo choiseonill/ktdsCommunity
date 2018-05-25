@@ -5,9 +5,14 @@
   <configuration>
   <typeAliases>
   	<typeAlias type="com.ktdsProject.member.vo.MemberVO" alias="MemberVO"/>
+  	<typeAlias type="com.ktdsProject.community.vo.CommunityVO" alias="CommunityVO"/>
+  	<typeAlias type="com.ktdsProject.community.vo.CommunitySearchVO" alias="CommunitySearchVO"/>
+  	<typeAlias type="com.ktdsProject.reply.vo.ReplyVO" alias="ReplyVO"/>
   </typeAliases>
   <mappers>
   	<mapper resource="com/ktdsProject/member/dao/sql/memberDao.xml"/>
+  	<mapper resource="com/ktdsProject/community/dao/sql/communityDao.xml"/>
+  	<mapper resource="com/ktdsProject/reply/dao/sql/replyDao.xml"/>
   </mappers>
   
   </configuration>

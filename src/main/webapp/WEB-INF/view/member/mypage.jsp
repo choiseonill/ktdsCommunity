@@ -7,62 +7,25 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <link rel="stylesheet"
 	href="<c:url value="/bootstrap/css/bootstrap.css" />">
 <link href="<c:url value="/bootstrap/css/bootstrap.min.css"/>"
 	rel="stylesheet">
-
+<script src="<c:url value="/bootstrap/js/bootstrap.min.js"/>"></script>
 <script src="<c:url value="/static/js/jquery-3.3.1.min.js"/>"
 	type="text/javascript"></script>
 <title>My Page</title>
 </head>
-<style>
-
-/* footer css*/
-.footer {
-	text-align: center;
-	padding: 30px 0;
-	margin-top: 70px;
-	border-top: 1px solid #e5e5e5;
-	background-color: #f5f5f5;
-}
-
-.footer p {
-	margin-bottom: 0;
-	color: #777;
-}
-
-.footer-links {
-	margin: 10px 0;
-}
-
-.footer-links li {
-	display: inline;
-	padding: 0 2px;
-}
-
-.footer-links li:first-child {
-	padding-left: 0;
-}
-</style>
 <body>
-	<nav class="navbar navbar-default">
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle collapsed"
-				data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
-				aria-expanded="false">
-				<span class="icon-bar"></span> <span class="icon-bar"></span> <span
-					class="icon-bar"></span>
-			</button>
-			<a class="navbar-brand" href="#">JSP 게시판</a>
-		</div>
-	</nav>
-	<hr />
+
+
+	<!-- nav -->
+	<jsp:include page="/WEB-INF/view/template/menu.jsp"/>
+	<!-- /nav -->
 	
-		<div class="container">
-
-
+	<!-- body상단 영역 -->
+	<!-- body상단 1번 영역 -->
+	<div class="container">
 		<div class="col-lg-4">
 			<div class="jumbotron" style="padding-top: 20px;">
 				<form>
@@ -70,18 +33,18 @@
 
 					<div>아이디 :</div>
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="아이디"
-							name="userId" maxlength="20" />
+						<input type="text" class="form-control" placeholder="아이디" name="userId" maxlength="20" />
 					</div>
 					<div>닉네임 :</div>
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="닉네임"
-							name="userNickname" maxlength="20" />
+						<input type="text" class="form-control" placeholder="닉네임" name="userNickname" maxlength="20" />
 					</div>
 				</form>
 			</div>
 		</div>
-
+		<!-- /body상단 1번 영역 -->
+		
+		<!-- body상단 2번 영역 -->
 		<div class="col-lg-4">
 			<div class="jumbotron" style="padding-top: 20px;">
 				<form>
@@ -89,18 +52,18 @@
 
 					<div>게시물 수  :</div>
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="아이디"
-							name="userId" maxlength="20" />
+						<input type="text" class="form-control" placeholder="아이디" name="userId" maxlength="20" />
 					</div>
 					<div>총 점수 :</div>
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="점수"
-							name="likePoint" maxlength="20" />
+						<input type="text" class="form-control" placeholder="점수" name="likePoint" maxlength="20" />
 					</div>
 				</form>
 			</div>
 		</div>
+		<!-- /body상단 2번 영역 -->
 		
+		<!-- body상단 3번 영역 -->
 		<div class="col-lg-4">
 			<div class="jumbotron" style="padding-top: 20px;">
 				<form>
@@ -108,21 +71,20 @@
 
 					<div>아이디 :</div>
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="아이디"
-							name="userId" maxlength="20" />
+						<input type="text" class="form-control" placeholder="아이디" name="userId" maxlength="20" />
 					</div>
 					<div>닉네임 :</div>
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="닉네임"
-							name="userNickname" maxlength="20" />
+						<input type="text" class="form-control" placeholder="닉네임" name="userNickname" maxlength="20" />
 					</div>
 				</form>
 			</div>
 		</div>
-		
-		
-</div>
-
+		<!-- /body상단 3번 영역 -->
+	</div>
+	<!-- /body상단 영역 -->
+	
+	<!-- body하단 영역 -->
 	<div class="container">
 		<table class="table table-striped">
 			<thead>
@@ -142,7 +104,6 @@
 					<td>2016.12.02</td>
 					<td>2</td>
 				</tr>
-
 				<tr>
 					<td>165</td>
 					<td>수정중</td>
@@ -150,7 +111,6 @@
 					<td>2016.12.02</td>
 					<td>2</td>
 				</tr>
-
 				<tr>
 					<td>165</td>
 					<td>수정중</td>
@@ -158,7 +118,6 @@
 					<td>2016.12.02</td>
 					<td>2</td>
 				</tr>
-
 				<tr>
 					<td>165</td>
 					<td>수정중</td>
@@ -175,32 +134,27 @@
 				</tr>
 			</tbody>
 		</table>
-
+		
+		
 		<hr />
-
+		<!-- body하 버튼 영역 -->
 		<div class="text-center">
 			<a class="btn btn-default">회원탈퇴</a>
 			<a class="btn btn-default" href="<c:url value="list"/>">>뒤로가기</a>
 		</div>
+		<!-- /body하 버튼 영역 -->
+		
 		<hr />
+		
 	</div>
+	<!-- /body하단 영역 -->
 
 
 
 
-
-	<footer class="footer">
-		<div class="container">
-			<p>수정 중 입니다.</p>
-			<ul class="footer-links">
-				<li><a href="#">수정중</a></li>
-				<li class="muted">&middot;</li>
-				<li><a href="#">수정중</a></li>
-				<li class="muted">&middot;</li>
-				<li><a href="#">수정중</a></li>
-			</ul>
-		</div>
-	</footer>
-	<script src="<c:url value="/bootstrap/js/bootstrap.min.js"/>"></script>
+	<!-- footer -->
+	<jsp:include page="/WEB-INF/view/template/footer.jsp"/>
+	<!-- /footer -->
+	
 </body>
 </html>

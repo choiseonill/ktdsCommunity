@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="ReplyDao">
+  
+  	<resultMap type="ReplyVO" id="ReplyVOMap">
+  		<id column="R_REPLY_ID" property="replyId"/>
+  		<result column="R_LEVEL" property="level"/>
+  		<result column="R_MEMBER_ID" property="memberId"/>
+  		<result column="R_COMMUNITY_ID" property="communityId"/>
+  		<result column="R_BODY" property="body"/>
+  		<result column="R_WRITE_DATE" property="writeDate"/>
+  		<result column="R_LIKE_COUNT" property="likeCount"/>
+  		<result column="R_DIS_LIKE_COUNT" property="disLikeCount"/>
+  		<result column="R_PARENT_REPLY_ID" property="parentReplyId"/>
+  	
+  	<association property="communityVO" javaType="CommunityVO">
+  		<id column="C_COMMUNITY_ID" property="communityId" />
+  		<result column="C_TITLE" property="title"/>
+  		<result column="C_BODY" property="body"/>
+  		<result column="C_MEMBER_ID" property="memberId"/>
+  		<result column="C_WRITE_DATE" property="writeDate"/>
+  		<result column="C_VIEW_COUNT" property="viewCount"/>
+  		<result column="C_LIKE_COUNT" property="likeCount"/>
+  		<result column="C_DIS_LIKE_COUNT" property="disLikeCount"/>
+  		<result column="C_DISPLAY_FILE_NAME" property="displayFilename"/>
+  	</association>
+  		
+  	<association property="memberVO" javaType="MemberVO">
+  		<id column="M_MEMBER_ID" property="memberId" />
+  		<result column="M_EMAIL" property="email"/>
+  		<result column="M_NICKNAME" property="nickname"/>
+		<result column="M_POINT_COUNT" property="pointCount"/>
+  	</association>
+  </resultMap>
+  
+  <select id="selectAllReplies" parameterType="_int" resultMap="ReplyVOMap">
+	  	SELECT 		LEVEL R_LEVEL
+	  				, R.REPLY_ID R_REPLY_ID
+	  				, R.MEMBER_ID R_MEMBER_ID
+	  				, R.COMMUNITY_ID R_COMMUNITY_ID
+	  				, R.BODY R_BODY
+	  				, R.WRITE_DATE R_WRITE_DATE
+	  				, R.LIKE_COUNT R_LIKE_COUNT
+	  				, R.DIS_LIKE_COUNT R_DIS_LIKE_COUNT
+	  				, R.PARENT_REPLY_ID R_PARENT_REPLY_ID
+	  				, C.COMMUNITY_ID C_COMMUNITY_ID
+	  				, C.TITLE C_TITLE
+	  				, C.BODY C_BODY
+	  				, C.MEMBER_ID C_MEMBER_ID
+	  				, C.WRITE_DATE C_WRITE_DATE
+	  				, C.VIEW_COUNT C_VIEW_COUNT
+	  				, C.LIKE_COUNT C_LIKE_COUNT
+	  				, C.DIS_LIKE_COUNT C_DIS_LIKE_COUNT
+	  				, C.DISPLAY_FILE_NAME C_DISPLAY_FILE_NAME
+	  				, R_M.MEMBER_ID M_MEMBER_ID
+	  				, R_M.EMAIL M_EMAIL
+	  				, R_M.NICKNAME M_NICKNAME
+	  				, R_M.POINT_COUNT M_POINT_COUNT
+	  	FROM 		REPLY R
+	  				, COMMUNITY C
+	  				, MEMBER C_M
+	  				, MEMBER R_M
+	  	WHERE 		R.MEMBER_ID = R_M.MEMBER_ID
+		AND			R.COMMUNITY_ID = C.COMMUNITY_ID
+		AND			C_M.MEMBER_ID = C.MEMBER_ID
+		AND			R.COMMUNITY_ID = #{communityId}
+		START		WITH R.PARENT_REPLY_ID = 0
+		CONNECT 	BY PRIOR R.REPLY_ID = R.PARENT_REPLY_ID
+		ORDER		SIBLINGS BY R.REPLY_ID ASC
+	
+  </select>
+  
+  	<select id="selectOneReply" parameterType="_int" resultMap="ReplyVOMap">
+		SELECT	R.REPLY_ID R_REPLY_ID
+				, R.MEMBER_ID R_MEMBER_ID
+				, R.COMMUNITY_ID R_COMMUNITY_ID
+				, R.BODY R_BODY
+				, R.WRITE_DATE R_WRITE_DATE
+				, R.LIKE_COUNT R_LIKE_COUNT
+				, R.DIS_LIKE_COUNT R_DIS_LIKE_COUNT
+				, R.PARENT_REPLY_ID R_PARENT_REPLY_ID
+				, C.COMMUNITY_ID C_COMMUNITY_ID
+				, C.TITLE C_TITLE
+				, C.BODY C_BODY
+				, C.VIEW_COUNT C_VIEW_COUNT
+				, C.LIKE_COUNT C_LIKE_COUNT
+				, C.DIS_LIKE_COUNT C_DIS_LIKE_COUNT
+				, C.DISPLAY_FILE_NAME C_DISPALY_FILE_NAME
+				, C.MEMBER_ID C_MEMBER_ID
+				, R_M.MEMBER_ID M_MEMBER_ID
+				, R_M.NICKNAME M_NICKNAME
+				, R_M.EMAIL	M_EMAIL
+				, R_M.WRITE_DATE M_WRITE_DATE
+		FROM	REPLY R
+				, COMMUNITY C
+				, MEMBER C_M
+				, MEMBER R_M
+				, REPLY PR
+		WHERE	R.MEMBER_ID = R_M.MEMBER_ID
+		AND		R.COMMUNITY_ID = C.COMMUNITY_ID
+		AND		C_M.MEMBER_ID = C.MEMBER_ID
+		AND		R.PARENT_REPLY_ID = PR.REPLY_ID
+		AND		R.REPLY_ID = #{replyId}
+	</select>
+	
+	<select id="nextValue" resultType="_int">
+		SELECT	REPLY_REPLY_ID_SEQ.NEXTVAL
+		FROM	DUAL
+	</select>
+  
+   <insert id="insertReply" parameterType="ReplyVO">
+		INSERT INTO	REPLY	(
+								REPLY_ID
+								, MEMBER_ID
+								, COMMUNITY_ID
+								, BODY
+								, WRITE_DATE
+								, LIKE_COUNT
+								, DIS_LIKE_COUNT
+								, PARENT_REPLY_ID
+							)
+		VALUES				(
+								#{replyId}
+								, #{memberId}
+								, #{communityId}
+								, #{body}
+								, SYSDATE
+								, 0
+								, 0
+								, #{parentReplyId}
+							)
+	</insert>
+
+	<update id="updateReplyLike" parameterType="_int" >
+	
+ 	 	UPDATE REPLY
+  		SET LIKE_COUNT = LIKE_COUNT + 1
+  		WHERE REPLY_ID = #{replyId}
+	
+	</update>
+	
+	<update id="updateReplydisLike" parameterType="_int" >
+	
+ 	 	UPDATE REPLY
+  		SET DIS_LIKE_COUNT = DIS_LIKE_COUNT + 1
+  		WHERE REPLY_ID = #{replyId}
+	
+	</update>
+	  
+	
+	<select id="selectReplyLikeAndDisLikeCount" parameterType="_int" resultMap="ReplyVOMap">
+		SELECT	R.REPLY_ID R_REPLY_ID
+  				, R.MEMBER_ID R_MEMBER_ID
+  				, R.COMMUNITY_ID R_COMMUNITY_ID
+  				, R.BODY R_BODY
+  				, R.WRITE_DATE R_WTIRE_DATE
+  				, R.LIKE_COUNT R_LIKE_COUNT
+  				, R.DIS_LIKE_COUNT R_DIS_LIKE_COUNT
+  				, R.PARENT_REPLY_ID R_PARENT_REPLY_ID
+  		FROM 	REPLY R
+  		WHERE   R.REPLY_ID = #{replyId}
+	
+	</select>
+	
+	
+
+ </mapper>

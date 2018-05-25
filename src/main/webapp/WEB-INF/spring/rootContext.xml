@@ -10,8 +10,8 @@
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
 		<property name="url" value="jdbc:oracle:thin:@localhost:1521:XE" />
-		<property name="username" value="KTDB" />
-		<property name="password" value="1234" />
+		<property name="username" value="KTDS" />
+		<property name="password" value="KTDS" />
 	</bean>
 	
 	

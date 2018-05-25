@@ -1,180 +1,243 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<link rel="stylesheet"
-	href="<c:url value="/bootstrap/css/bootstrap.css" />">
 <link href="<c:url value="/bootstrap/css/bootstrap.min.css"/>"
 	rel="stylesheet">
-
-<!-- join css -->
-<link rel="stylesheet" type="text/css"
-	href="<c:url value="/static/css/button.css"/>" />
 <link rel="stylesheet" type="text/css"
 	href="<c:url value="/static/css/input.css"/>" />
 <link rel="stylesheet" type="text/css"
-	href="<c:url value="/static/css/link.css"/>" />		
-
+	href="<c:url value="/static/css/footer.css"/>" />	
 <script src="<c:url value="/static/js/jquery-3.3.1.min.js"/>"
 	type="text/javascript"></script>
-
 <script type="text/javascript">
-	$().ready(function() {
 
-		$("#userId").keyup(function() {
-
-			var value = $(this).val();
-			if (value != "") {
-				$(this).removeClass("invalid");
-				$(this).addClass("valid");
-			} else {
-				$(this).removeClass("valid");
-				$(this).addClass("invalid");
-			}
-		});
-
-		$("#nickname").keyup(function() {
-
-			var value = $(this).val();
-			if (value != "") {
-				$(this).removeClass("invalid");
-				$(this).addClass("valid");
-			} else {
-				$(this).removeClass("valid");
-				$(this).addClass("invalid");
-			}
-		});
-
-		$("#userPassword").keyup(function() {
-
-			var value = $(this).val();
-			if (value != "") {
-				$(this).removeClass("invalid");
-				$(this).addClass("valid");
-			} else {
-				$(this).removeClass("valid");
-				$(this).addClass("invalid");
-			}
-
-			var password = $("#userPassword-confirm").val();
-
-			if (value != password) {
-				$(this).removeClass("valid");
-				$(this).addClass("invalid");
-				$("#userPassword-confirm").removeClass("valid");
-				$("#userPassword-confirm").addClass("invalid");
-			} else {
-				$(this).removeClass("invalid");
-				$(this).addClass("valid");
-				$("#userPassword").removeClass("invalid");
-				$("#userPassword").addClass("valid");
-			}
-
-		});
-
-		$("#userPassword-confirm").keyup(function() {
-
-			var value = $(this).val();
-			var password = $("#userPassword").val();
-
-			if (value != password) {
-				$(this).removeClass("valid");
-				$(this).addClass("invalid");
-				$("#userPassword").removeClass("valid");
-				$("#userPassword").addClass("invalid");
-			} else {
-				$(this).removeClass("invalid");
-				$(this).addClass("valid");
-				$("#userPassword").removeClass("invalid");
-				$("#userPassword").addClass("valid");
-			}
-		});
-
-		$("#joinBtn").click(function() {
-
-			if ($("#userId").val() == "") {
-				alert("이메일을 입력하세요!");
-				$("#userId").focus();
-				$("#userId").addClass("invalid");
-				return false;
-			}
-
-			if ($("#nickname").val() == "") {
-				alert("닉네임을 입력하세요!");
-				$("#nickname").focus();
-				$("#nickname").addClass("invalid");
-				return false;
-			}
-
-			if ($("#userPassword").val() == "") {
-				alert("비밀번호를 입력하세요!");
-				$("#userPassword").focus();
-				$("#userPassword").addClass("invalid");
-				return false;
-			}
-
-			$("#joinForm").attr({
-				"method" : "post",
-				"action" : "<c:url value="/join"/>"
-			}).submit();
-		});
+$().ready(function() {
+	
+	$("#email").keyup(function() {
+		var value = $(this).val();
+		if ( value != "" ) {
+			
+			$.post("<c:url value="/api/exists/email"/>", {
+				email: value
+			}, function(response) {
+				console.log(response.response);
+				
+				if ( response.response ) {
+					$("#email").removeClass("valid");
+					$("#email").addClass("invalid");
+				}
+				else {
+					$("#email").removeClass("invalid");
+					$("#email").addClass("valid");
+				}
+			});
+		}
+		else {
+			$(this).removeClass("valid");
+			$(this).addClass("invalid");
+		}
 	});
+	
+	$("#nickname").keyup(function() {
+		var value = $(this).val();
+		if ( value != "" ) {
+			$.post("<c:url value="/api/exists/nickname"/>", {
+				nickname: value
+			}, function(response) {
+				console.log(response.response);
+				if ( response.response ) {
+					$("#nickname").removeClass("valid");
+					$("#nickname").addClass("invalid");
+				}
+				else {
+					$("#nickname").removeClass("invalid");
+					$("#nickname").addClass("valid");
+				}
+			});
+		}
+		else {
+			$(this).removeClass("valid");
+			$(this).addClass("invalid");
+		}
+	});
+	
+	$("#password").keyup(function() {
+		var value = $(this).val();
+		if ( value != "" ) {
+			$(this).removeClass("invalid");
+			$(this).addClass("valid");
+		}
+		else {
+			$(this).removeClass("valid");
+			$(this).addClass("invalid");
+		}
+		
+		var password = $("#password-confirm").val();
+		
+		if ( value != password ) {
+			$(this).removeClass("valid");
+			$(this).addClass("invalid");
+			$("#password-confirm").removeClass("valid");
+			$("#password-confirm").addClass("invalid");
+		}
+		else {
+			$(this).removeClass("invalid");
+			$(this).addClass("valid");
+			$("#password-confirm").removeClass("invalid");
+			$("#password-confirm").addClass("valid");
+		}
+	});
+	
+	$("#password-confirm").keyup(function() {
+		var value = $(this).val();
+		var password = $("#password").val();
+		
+		if ( value != password ) {
+			$(this).removeClass("valid");
+			$(this).addClass("invalid");
+			$("#password").removeClass("valid");
+			$("#password").addClass("invalid");
+		}
+		else {
+			$(this).removeClass("invalid");
+			$(this).addClass("valid");
+			$("#password").removeClass("invalid");
+			$("#password").addClass("valid");
+		}
+	});
+	
+	$("#cancelBtn").click(function(){
+		location.href="<c:url value="/login"/>";
+	});
+	
+	$("#joinBtn").click(function() {
+		
+		if ( $("#email").val() == "" ) {
+			alert("이메일을 입력하세요!");
+			$("#email").focus();
+			$("#email").addClass("invalid");
+			return false;
+		}
+		
+		if ( $("#email").hasClass("invalid") ) {
+			alert("작성한 이메일은 사용할 수 없습니다.");
+			$("#email").focus();
+			return false;
+		}
+		else {
+			$.post("<c:url value="/api/exists/email"/>", {
+				email: $("#email").val()
+			}, function(response) {
+				
+				if ( response.response ) {
+					alert("작성한 이메일은 사용할 수 없습니다.");
+					$("#email").focus();
+					return false;
+				}
+				
+				if ( $("#nickname").val() == "" ) {
+					alert("닉네임을 입력하세요!");
+					$("#nickname").focus();
+					$("#nickname").addClass("invalid");
+					return false;
+				}
+				
+				if ( $("#nickname").hasClass("invalid") ) {
+					console.log("nickname invalid check"); 
+					alert("작성한 닉네임은 사용할 수 없습니다.");
+					$("#nickname").focus();
+					return false;
+				}
+				else {
+					$.post("<c:url value="/api/exists/nickname"/>", {
+						nickname: $("#nickname").val()
+					}, function(response) {
+						if ( response.response ) {
+							console.log("second nickname invalid check");
+							$("#nickname").removeClass("valid");
+							$("#nickname").addClass("invalid");
+							return false;
+						}
+						else {
+							$("#nickname").removeClass("invalid");
+							$("#nickname").addClass("valid");
+							
+							if ( $("#password").val() == "" ) {
+								alert("비밀번호를 입력하세요!");
+								$("#password").focus();
+								$("#password").addClass("invalid");
+								return false;
+							}
+									
+							$("#joinForm").attr({
+								"method": "post",
+								"action": "<c:url value="/join"/>"
+							}).submit();
+						}
+					});
+				}
+			});
+		}
+	});
+});
 </script>
 <title>회원가입 Page</title>
 </head>
 <body>
-	<nav class="navbar navbar-default">
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle collapsed"
-				data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
-				aria-expanded="false">
-				<span class="icon-bar"></span> <span class="icon-bar"></span> <span
-					class="icon-bar"></span>
-			</button>
-			<a class="navbar-brand" href="#">JSP 게시판</a>
-		</div>
-	</nav>
-	<hr />
-	<div class="container">
-		<div class="col-lg-4"></div>
-		<div class="col-lg-4">
-			<div class="jumbotron" style="padding-top: 20px;">
-				<form:form modelAttribute="joinForm">
-					<h3 style="text-align: center;">회원가입 화면</h3>
-					<div class="form-group">
-						<input type="text" class="form-control" placeholder="아이디"
-							name="userId" id="userId" maxlength="20" />
-					</div>
-					<div class="form-group">
-						<input type="text" class="form-control" placeholder="닉네임"
-							name="nickname" id="nickname" maxlength="20" />
-					</div>
-					<div class="form-group">
-						<input type="password" class="form-control" placeholder="비밀번호"
-							name="userPassword" id="userPassword" maxlength="20" />
-					</div>
-					<div class="form-group">
-						<input type="password" class="form-control" placeholder="비밀번호"
-							name="userPassword-confirm" id="userPassword-confirm" maxlength="20" />
-					</div>
-					
-
-					<div class="form-group">
-						<input type="submit" class="btn btn-primary form-control" id="joinBtn"
-							value="회원가입" />
-					</div>
-					<input type="button" class="btn btn-primary form-control"
-						value="취소" />
+	<!-- nav -->
+	<jsp:include page="/WEB-INF/view/template/menu.jsp"/>
+	<!-- /nav -->
+	
+	<!-- join -->
+     <div class="container">
+		 <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
+		    <div class="login-panel panel panel-default">
+		  	<div class="panel-heading"><h3 class="panel-title"><strong>JoIn </strong></h3></div>
+		  	
+		 		 <div class="panel-body">
+		 		 <form:form modelAttribute="joinForm" class="form-signin">
+		 		 
+		  		<div class="form-group">
+		    		<label for="exampleInputEmail1">Email</label>
+		    		<input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
+		  		</div>
+		  		
+		  		<div class="form-group">
+		    		<label for="exampleInputEmail1">Email</label>
+		    		<input type="text" class="form-control" id=nickname name="nickname" placeholder="Enter nickname">
+		  		</div>
+		  		
+		  		<div class="form-group">
+		   			 <label for="exampleInputPassword1">Password</label>
+		        	 <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+		  		</div>
+		  		
+				<div class="form-group">
+		    		<label for="exampleInputPassword1">Password</label>
+		    		<input type="password" class="form-control" id="password-confirm" name="password-confirm" placeholder="password-confirm">
+		  		</div> 
+		  		
+		  		<button type="button" id="joinBtn" class="btn btn-sm btn-default"> Join</button>
+		  		<button type="button" id="cancelBtn"class="btn btn-sm btn-default">Cancel</button>
+		  		
 				</form:form>
+		  		</div>
 			</div>
 		</div>
-	</div>
-	<script src="<c:url value="/bootstrap/js/bootstrap.min.js"/>"></script>
+    </div>
+    <!-- /join -->
+    
+    
+	<!-- footer -->
+	<jsp:include page="/WEB-INF/view/template/footer.jsp"/>
+	<!-- /footer -->
+
+    
+    
 </body>
 </html>

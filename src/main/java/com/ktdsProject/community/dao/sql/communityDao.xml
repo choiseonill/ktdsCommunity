@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="CommunityDAO"> <!-- 인터페이스 이름 : CommunityDAO -->
+  
+  	<resultMap type="CommunityVO" id="CommunityVOMap">
+  		<id column="C_COMMUNITY_ID" property="communityId" />
+  		<result column="TITLE" property="title"/>
+  		<result column="BODY" property="body"/>
+  		<result column="MEMBER_ID" property="memberId"/>
+  		<result column="WRITE_DATE" property="writeDate"/>
+  		<result column="VIEW_COUNT" property="viewCount"/>
+  		<result column="LIKE_COUNT" property="likeCount"/>
+  		<result column="DIS_LIKE_COUNT" property="disLikeCount"/>
+  		<result column="DISPLAY_FILE_NAME" property="displayFilename"/>
+  		
+  		<association property="memberVO" javaType="MemberVO">
+  			<id column="M_MEMBER_ID" property="memberId" />
+  			<result column="EMAIL" property="email"/>
+  			<result column="NICKNAME" property="nickname"/>
+  			<result column="POINT_COUNT" property="nickname"/>
+  		</association>
+  	</resultMap>
+  	
+  <select id="selectCountAll" resultType="_int" parameterType="CommunitySearchVO">
+		SELECT	COUNT(C.COMMUNITY_ID)
+		FROM	COMMUNITY C
+				, MEMBER M
+		WHERE	C.MEMBER_ID = M.MEMBER_ID (+)
+		
+</select>
+  	
+  	
+  	
+  	
+  	
+  	<select id="selectAll" resultMap="CommunityVOMap" parameterType="CommunitySearchVO"> 
+  SELECT *
+  		FROM (
+  			SELECT ROWNUM RNUM
+  					, C.*
+  			FROM (
+			  		SELECT C.COMMUNITY_ID C_COMMUNITY_ID
+			  			   , C.TITLE
+			  			   , C.BODY
+			  			   , C.MEMBER_ID C_MEMBER_ID
+			  			   , TO_CHAR(C.WRITE_DATE,'YYYY-MM-DD HH24:MI:SS') WRITE_DATE
+			  			   , C.VIEW_COUNT
+			  			   , C.LIKE_COUNT
+			  			   , C.DISPLAY_FILE_NAME
+			  			   , M.MEMBER_ID M_MEMBER_ID
+			  			   , M.EMAIL
+			  			   , M.NICKNAME
+			  		FROM   COMMUNITY C
+			  			   , MEMBER M
+			  		WHERE  C.MEMBER_ID = M.MEMBER_ID(+)	
+					ORDER   BY C.COMMUNITY_ID DESC
+			) C
+		WHERE	ROWNUM <![CDATA[ <= ]]> #{endNumber}
+		)
+	WHERE	RNUM >= #{startNumber}
+  	</select>
+  	
+  	<insert id="insertCommunity" parameterType="CommunityVO">
+  		INSERT INTO COMMUNITY
+		  					(
+		  					COMMUNITY_ID
+		  					, TITLE
+		  					, BODY
+		  					, MEMBER_ID
+		  					, WRITE_DATE
+		  					, VIEW_COUNT
+		  					, LIKE_COUNT
+		  					, DISPLAY_FILE_NAME
+		  					)
+  			VALUES  (
+  					COMMUNITY_COMMUNITY_ID_SEQ.NEXTVAL
+  					, #{title}
+  					, #{body}
+  					, #{memberId}
+  					, SYSDATE-3/24
+  					, 0
+  					, 0
+  					, #{displayFilename}
+  					)
+  	</insert>
+  	
+  	<select id="readCommunity" parameterType="_int" resultMap="CommunityVOMap">
+  		SELECT C.COMMUNITY_ID C_COMMUNITY_ID
+  			   , C.TITLE
+  			   , C.BODY
+  			   , C.MEMBER_ID
+  			   , TO_CHAR(C.WRITE_DATE,'YYYY-MM-DD HH24:MI:SS') WRITE_DATE
+  			   , C.VIEW_COUNT
+  			   , C.LIKE_COUNT
+  			   , C.DISPLAY_FILE_NAME
+  			   , M.MEMBER_ID
+  			   , M.EMAIL
+  			   , M.NICKNAME
+  		FROM   COMMUNITY C
+  			   , MEMBER M
+  		WHERE  C.MEMBER_ID = M.MEMBER_ID(+)
+  		AND    C.COMMUNITY_ID = #{communityId}
+  	</select>
+  	
+  	<update id="updateViewCountCommunity" parameterType="_int">
+  		UPDATE COMMUNITY
+  		SET VIEW_COUNT = VIEW_COUNT + 1
+  		WHERE COMMUNITY_ID = #{communityId}
+  	</update>
+
+  	<update id="updateLikeCountCommunity" parameterType="_int">
+  		UPDATE COMMUNITY
+  		SET LIKE_COUNT = LIKE_COUNT + 1
+  		WHERE COMMUNITY_ID = #{communityId}
+  	</update>
+  	
+   <delete id="deleteCommunity" parameterType="_int">
+  		DELETE
+  		FROM    COMMUNITY
+  		WHERE 	COMMUNITY_ID = #{communityId} 
+   
+   </delete>
+   
+   <update id="updateCommunity" parameterType="CommunityVO">
+   		UPDATE COMMUNITY
+   		SET    WRITE_DATE = SYSDATE
+   			   <if test="title != null and title != ''">
+   			   , TITLE = #{title}
+   			   </if>
+   			   <if test="body != null and body != ''">
+   			   , BODY = #{body}
+   			   </if>
+   			   , DISPLAY_FILE_NAME = #{displayFilename}
+   			   
+   		WHERE COMMUNITY_ID = #{communityId}
+   		AND   MEMBER_ID = #{memberId}
+   </update>
+
+  
+  </mapper>

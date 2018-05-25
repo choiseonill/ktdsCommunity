@@ -5,6 +5,7 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/resource"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp"/>
+        <wb-resource deploy-path="/" source-path="/webapp" tag="defaultRootSource"/>
         <property name="context-root" value="KtdsProject"/>
         <property name="java-output-path" value="/KtdsProject/build/classes"/>
     </wb-module>
